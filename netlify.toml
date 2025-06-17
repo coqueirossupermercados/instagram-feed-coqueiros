@@ -1,11 +1,16 @@
 [build]
-  command = "npm run build"
+  command = "npm install && npm run build"
+  functions = "functions"
   publish = "."
 
-[[plugins]]
-  package = "@netlify/plugin-sitemap"
+[[headers]]
+  for = "/feed.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/json"
 
-[[scheduled]]
-  name = "Atualizar feed do Instagram"
-  command = "npm run build"
+[[plugins]]
+  package = "@netlify/plugin-schedule"
+
+  [plugins.inputs]
   schedule = "@hourly"

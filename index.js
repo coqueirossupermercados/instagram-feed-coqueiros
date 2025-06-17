@@ -1,21 +1,30 @@
 const fs = require('fs');
-const path = require('path');
+const fetch = require('node-fetch');
 
-// Simulação de dados do Instagram (em produção, substituir por scraping real ou API externa)
-const posts = [
-  {
-    image: "https://via.placeholder.com/400x400?text=Post+1",
-    link: "https://www.instagram.com/p/POST1/"
-  },
-  {
-    image: "https://via.placeholder.com/400x400?text=Post+2",
-    link: "https://www.instagram.com/p/POST2/"
-  },
-  {
-    image: "https://via.placeholder.com/400x400?text=Post+3",
-    link: "https://www.instagram.com/p/POST3/"
+const INSTAGRAM_USERNAME = 'coqueiros_supermercados';
+const OUTPUT_FILE = 'feed.json';
+
+async function scrapeInstagramFeed() {
+  try {
+    const response = await fetch(`https://www.instagram.com/${INSTAGRAM_USERNAME}/?__a=1&__d=dis`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0'
+      }
+    });
+
+    const json = await response.json();
+    const edges = json?.graphql?.user?.edge_owner_to_timeline_media?.edges || [];
+
+    const posts = edges.slice(0, 6).map(edge => ({
+      image: edge.node.display_url,
+      link: `https://www.instagram.com/p/${edge.node.shortcode}/`
+    }));
+
+    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(posts, null, 2));
+    console.log(`✅ Feed atualizado com ${posts.length} posts.`);
+  } catch (err) {
+    console.error("❌ Erro ao atualizar o feed:", err);
   }
-];
+}
 
-fs.writeFileSync(path.join(__dirname, 'feed.json'), JSON.stringify(posts, null, 2));
-console.log("Feed gerado com sucesso!");
+scrapeInstagramFeed();
