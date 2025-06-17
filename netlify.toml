@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "."
+
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+
+[[scheduled]]
+  name = "Atualizar feed do Instagram"
+  command = "npm run build"
+  schedule = "@hourly"
