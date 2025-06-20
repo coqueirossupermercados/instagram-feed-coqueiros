@@ -1,15 +1,13 @@
 {
   "name": "instagram-feed-netlify",
   "version": "1.0.0",
-  "description": "Atualização automática do feed Instagram para site Wix via Netlify",
+  "description": "Instagram Feed Updater for Netlify",
   "main": "index.js",
   "scripts": {
     "build": "node index.js"
   },
-  "type": "module",
-  "engines": {
-    "node": ">=18"
-  },
-  "author": "",
-  "license": "MIT"
+  "dependencies": {},
+  "devDependencies": {
+    "@netlify/plugin-scheduled": "^2.0.0"
+  }
 }
